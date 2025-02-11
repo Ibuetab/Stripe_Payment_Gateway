@@ -55,7 +55,9 @@ def get_customer_id(email):
     for customer in customers:
         return customer["id"]
 
-
+#obtener el nombre de un cliente
+def get_customer_name(client_id):
+    pass
 
 
 
