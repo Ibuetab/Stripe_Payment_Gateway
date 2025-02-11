@@ -1,8 +1,10 @@
+#--------------------------------------------------------------------------------------------------------------------------------------
 import os
 import dotenv
 import stripe
 
 
+#--------------------------------------------------------------------------------------------------------------------------------------
 #Configuracion del entorno
 dotenv.load_dotenv() #Carga todas las variables de entorno
 
@@ -11,6 +13,7 @@ STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 stripe.api_key = STRIPE_SECRET_KEY
 
 
+#--------------------------------------------------------------------------------------------------------------------------------------
 #Creación de un cliente
 def create_user(name,email):
     try:
@@ -42,9 +45,7 @@ def create_product(name,description):
 
 
 
-
-
-
+#--------------------------------------------------------------------------------------------------------------------------------------
 #obtener el id de un cliente
 def get_customer_id(email):
     customers = stripe.Customer.list(
@@ -57,15 +58,46 @@ def get_customer_id(email):
 
 
 
+
 # Obtener el id de un producto
-def get_product_id():
-    products = stripe.Product.list(
-       
-        limit=3,
-    )
-    for product in products:
-        return product["id"]
+def get_product_id(name):
+    product = stripe.Product.search(
+       query = f"name:'{name}'"
+       )
+    return product["data"][0]["id"]
      
+
+#--------------------------------------------------------------------------------------------------------------------------------------
+# Creación de un metodo de pago
+def create_payment_method() -> str:
+    try:
+        payment_method = stripe.PaymentMethod.create(
+            type="card",
+            card={"token":"tok_visa"}
+            
+        )
+        print(f"Metodo de pago creado con ID: {payment_method.id}")
+        return payment_method.id
+
+    except stripe.error.StripeError as e:
+        print("error:")
+
+
+#Asociar el método de pago a un cliente
+def add_payment_method_to_user(client_id,payment_method_id):
+    try:
+        payment_method = stripe.PaymentMethod.attach(
+            payment_method_id,
+            customer=client_id,
+        )
+        print(f"Método de pago asociado correctamente al cliente con el ID: {payment_method.customer}")
+    except stripe.error.StripeError as e:
+        print("No se ha podido asociar el método de pago")
+
+
+
+
+
 
 
 
@@ -85,21 +117,6 @@ def get_products_price(product_id):
 
 
 
-# Crear un metodo de pago
-def create_payment_method() -> str:
-    try:
-        payment_method = stripe.PaymentMethod.create(
-            type="card",
-            card={"token":"tok_visa"}
-            
-
-        )
-        print(f"Metodo de pago creado con ID: {payment_method.id}")
-        print(payment_method)
-        return payment_method.id
-
-    except stripe.error.StripeError as e:
-        print("error:")
 
         
 
@@ -132,18 +149,7 @@ def create_payment(client_id:str,payment_method_id:str,amount:int, currency:str)
 
 
 
-def add_payment_method_to_user(client_id,payment_method_id):
-    stripe.PaymentMethod.attach(
-        payment_method_id,
-        customer=client_id,
-    )
 
-
-
-
-
-#payment_method_id = create_payment_method()
-#create_payment(payment_method_id)
 
 #client_id=create_user("assaa","asaasas@gmail.com")
 #payment_method_id = create_payment_method()
@@ -154,9 +160,28 @@ def add_payment_method_to_user(client_id,payment_method_id):
 
 
 """
+#Crear cliente
+#Crear producto
+#Crear método de pago
+
+#Obtener primero el id del cliente
+#client_id = get_customer_id("bbb@gmail.com")
+#print(client_id)
 
 #create_user("bbb","bbb@gmail.com")
 #create_product("Producto 2","Descripcion del producto 2") 
-product_id=get_product_id()
-#customer_id = get_customer_id("bbb@gmail.com")
-print(product_id)
+#product_id=get_product_id()
+
+#print(product_id)
+
+#objects= stripe.Product.list(limit=3)
+#print(objects)
+
+#object_search = stripe.Product.search(query="active:'true' AND name:'Producto2'")
+#object_search = get_product_id("Producto 1")
+#print(object_search)
+
+
+#payment_method_id = create_payment_method()
+#create_payment(payment_method_id)
+#add_payment_method_to_user(client_id,"pm_1QrQtBD1dBBLGtBmPH6JAPxU")
