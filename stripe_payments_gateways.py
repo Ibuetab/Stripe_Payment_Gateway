@@ -97,32 +97,7 @@ def add_payment_method_to_user(client_id,payment_method_id):
         print("No se ha podido asociar el método de pago")
 
 
-
-
-
-
-
-
-""" 
-# Obtener el precio de un producto 
-def get_products_price(product_id):
-    stripe.Price.list(
-        product = product_id,
-        limit=1
-    )
-    price_id = price["data"][0]["id"],
-    amount = price["data"][0]["unit_amount"],
-    #currency= price["data"][0]["currency"],
-
-
-    return price_id, amount
-
-
-
-
-        
-
-
+#--------------------------------------------------------------------------------------------------------------------------------------
 #Crear un pago
 
 def create_payment(client_id:str,payment_method_id:str,amount:int, currency:str):
@@ -134,12 +109,9 @@ def create_payment(client_id:str,payment_method_id:str,amount:int, currency:str)
                 payment_method=payment_method_id,
                 payment_method_types=["card"],
                 customer=client_id,
-                
-
                 confirm=True
     )
         
-    
     except stripe.error.CardError as e:
         print("Error en la creacion del pago")
         print(e)
@@ -149,41 +121,3 @@ def create_payment(client_id:str,payment_method_id:str,amount:int, currency:str)
 
 
 
-
-
-
-
-#client_id=create_user("assaa","asaasas@gmail.com")
-#payment_method_id = create_payment_method()
-#add_payment_method_to_user(client_id, payment_method_id)
-
-#product_id = get_product()
-#price_id, amount, currency = get_products_price(product_id)
-
-
-"""
-#Crear cliente
-#Crear producto
-#Crear método de pago
-
-#Obtener primero el id del cliente
-#client_id = get_customer_id("bbb@gmail.com")
-#print(client_id)
-
-#create_user("bbb","bbb@gmail.com")
-#create_product("Producto 2","Descripcion del producto 2") 
-#product_id=get_product_id()
-
-#print(product_id)
-
-#objects= stripe.Product.list(limit=3)
-#print(objects)
-
-#object_search = stripe.Product.search(query="active:'true' AND name:'Producto2'")
-#object_search = get_product_id("Producto 1")
-#print(object_search)
-
-
-#payment_method_id = create_payment_method()
-#create_payment(payment_method_id)
-#add_payment_method_to_user(client_id,"pm_1QrQtBD1dBBLGtBmPH6JAPxU")

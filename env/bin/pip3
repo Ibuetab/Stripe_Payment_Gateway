@@ -1,4 +1,4 @@
-#!/home/isa/Desktop/Pasarela-pago/env/bin/python3
+#!/home/isa/Escritorio/Proyectos/Pasarela_Pago_Stripe/Stripe_Payment_Gateway/env/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
